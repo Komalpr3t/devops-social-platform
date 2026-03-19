@@ -1,0 +1,37 @@
+# Docker Compose file to define and run multi-container Docker applications
+# This file will use two dockerfiles, one we created for the backend and one we created for the frontend, to build the images and run the containers
+
+
+# services are basically the multiple containers we want to run,
+# in this case we have two services, backend and frontend, each will be built from their respective dockerfiles
+# and run as separate containers
+services:
+
+  #backend service configuration
+  backend:
+    build: ./backend  # this tells docker to build the image from the backend dockerfile
+    ports:
+      - "5000:5000" # this maps port 5000 of the container to port 5000 of the host machine, so we can access the backend from our local machine
+                    # this matches the port we exposed in the backend dockerfile
+    env_file:       # this tells docker to load environment variables from the .env file in the backend directory, so we can use those variables in our backend application
+      - ./backend/.env
+    restart: always  # always restart container if it stops unless we explicitly stop it, 
+                    # this is essential to always keep the backend running
+
+  #frontend service configuration
+  frontend:
+    build: ./frontend # this tells docker to build the image from the frontend dockerfile
+    ports:
+      - "3000:80" # this maps port 80 of the container (nginx default port) to port 3000 of the host machine, so we can access the frontend from our local machine
+                    # this matches the port we exposed in the frontend dockerfile`
+                    # 3000 is the default port for React app, 
+                    # but since we are using nginx we will map it to port 80 in the container
+                    # to access the frontend, we will go to http://localhost:3000 in our browser, 
+                    #which will be forwarded to port 80 of the container where nginx is serving the React app
+    
+    depends_on: # this tells docker that the frontend service depends on the backend service, 
+      - backend # so it will start the backend service first before starting the frontend service, 
+                # this is important because the frontend needs the backend to be running in order to function properly
+      
+    restart: always # always restart container if it stops unless we explicitly stop it, 
+                    # this is essential to always keep the frontend running
