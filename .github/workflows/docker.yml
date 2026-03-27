@@ -1,0 +1,48 @@
+# This name can be any name, it is just for display purposes in the GitHub Actions UI
+name: Build and Push Docker Images
+
+# this section says to trigger the pipeline whenever there is a push to the main branch
+on:
+    push:
+        branches:
+            - main
+
+# After triggering, what to do? This section tells the pipeline the jobs to do.
+jobs:
+    build: # Name of the job, can be any name
+        runs-on: ubuntu-latest  # the type of machine to run the job on
+                                # GitHub provides these virtual machines for free, and you can choose from different operating systems and configurations
+
+        steps:    # the steps to execute in this "build" job
+        
+        - name: Checkout code   # download the code from the repo to the virtual machine so that we can work with the code
+          uses: actions/checkout@v2 # this is a pre-built action provided by GitHub that checks out the code from the repository
+
+        - name: Set up Docker Buildx # Set up Docker Buildx, which is a pre-built tool provided by Docker 
+          uses: docker/setup-buildx-action@v3 # that allows for building multi-platform Docker images and provides advanced features for building and pushing images
+
+        - name: Login to DockerHub # Log in to DockerHub using the credentials stored in GitHub Secrets. This is necessary to push the built images to DockerHub.
+          uses: docker/login-action@v3 # this is a pre-built action provided by Docker that logs into DockerHub 
+          with:
+            username: ${{ secrets.DOCKER_USERNAME }} # access DockerHub credentials stored in GitHub Actions
+            password: ${{ secrets.DOCKER_PASSWORD }}
+
+            # After downloading the code, setting up Docker Builtx, and Logging in to DockerHub
+            # we can now build the Docker images for both the backend and frontend
+            # and then push those images to DockerHub so that they can be used in our Kubernetes cluster
+        - name: Build backend image  
+          uses: docker/build-push-action@v5    # pre-built action by docker that builds and pushes Docker image in one go
+          with:
+            context: ./backend  # the directory where the Dockerfile for the backend is located
+            push: true # if its false it will only build the image but NOT push it to DockerHub
+            tags: komalpreet1703/devops-social-backend:latest # the name and tag for the Docker image
+                                                              # latest means build the image and tag it as "latest"
+
+        - name: Build frontend image
+          uses: docker/build-push-action@v5
+          with:
+            context: ./frontend
+            push: true
+            tags: komalpreet1703/devops-social-frontend:latest    
+
+
