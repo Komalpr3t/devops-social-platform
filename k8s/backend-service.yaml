@@ -1,0 +1,22 @@
+# This file is for creating a Kubernetes Service resource that exposes the backend application to other serivces within the cluster.
+# Difference between Deployment and Service is that Service manages the network access while Deployment manages the lifecycle of the application pods.
+apiVersion: v1  # This is the apiVersion to be used for this Service.
+kind: Service # This is Kubernetes prebuilt keyword that specifies we are creating a Service resource.
+
+metadata: # again metadata is formal data about the Service resource.
+  name: backend-service # This is the name of the Service resource.
+
+spec:  # spec means specification, it specifies the desired state of the Service resource, such as which pods to target and how to route traffic to those pods.
+  selector: # This selector is different from the one in the Deployment as it is used to identify the pods that this Service will route traffic to. It should match the labels of the pods created by the Deployment to ensure that the Service can route traffic to the correct pods.
+    app: backend # This label is used to identify the pods that belong to the backend application. The Service will route traffic to all pods with this label.
+
+  ports: # ports is a list of types of ports that the Service will expose. Each port specification includes details such as the port number, target port, and protocol.
+    - protocol: TCP # These three together specify one port that the Service will expose.
+      port: 5000 # both port and targetPort are set to 5000 because the backend application listens on port 5000 inside the container, and we want to expose that same port through the Service.
+      targetPort: 5000 # This is the port on the backend pods that the Service will route traffic to. It should match the containerPort specified in the Deployment to ensure that traffic is correctly routed to the backend application.
+
+  type: ClusterIP # type keyword specifies what type of Service we want to create.
+                  # It comes at the end of the file because it is a higher-level specification that determines how the Service will be exposed and accessed within the cluster. 
+                  # ClusterIP is the default type, which means the Service will be accessible only within the cluster. 
+                  # Other types include NodePort (exposes the Service on a static port on each node) and LoadBalancer (provisions an external load balancer to expose the Service outside the cluster).
+  

@@ -1,0 +1,25 @@
+apiVersion: apps/v1 # API version for Deployment resources
+kind: Deployment # Deployment manages a set of pods and ensures the desired number stays running
+
+metadata:
+  name: frontend-deployment # unique name for this frontend Deployment resource
+
+spec:
+  replicas: 1 # number of frontend pods to run
+
+  selector:
+    matchLabels:
+      app: frontend # selects pods with label app: frontend for this Deployment
+
+  template:
+    metadata:
+      labels:
+        app: frontend # labels assigned to pods created by this Deployment
+
+    spec:
+      containers: # container definitions inside each pod
+        - name: frontend
+          image: komalpreet1703/devops-social-frontend:latest # frontend container image
+
+          ports:
+            - containerPort: 80 # port exposed by the frontend container

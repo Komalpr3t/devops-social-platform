@@ -1,0 +1,26 @@
+apiVersion: apps/v1 # This is the API version for the Deployment resource in Kubernetes. API is the interface through which we interact with Kubernetes.
+kind: Deployment # This is Kubernetes keyword that specifies we are creating a Deployment resource.
+                 # Deployment manages a set of identical pods, ensuring that the specified number of pods are running at all times.
+
+metadata:  # Metadata is formal data about the Deployment resource, like its name, labels, and annotations.
+  name: backend-deployment # It helps Kubernetes identify and manage the Deployment resource.
+
+spec: # spec means specification, it specifies the number of replicas (pods) to run.
+  replicas: 1 # replica (pod) is a copy of the application that we want to run. 
+              
+  selector:  # selector is used to identify the created pods
+    matchLabels: # matchLabels is a key-value pair that helps Kubernetes identify which pods belong to this Deployment.
+      app: backend # This label is used to group the pods. In this case, all pods with the label "app: backend" will be managed by this Deployment.
+
+  template:  # template is a blueprint for the pods that will be created by this Deployment. It defines the specifications of the pods, such as the containers they will run and their configurations.
+    metadata: 
+      labels:
+        app: backend # this label is different from the one in the selector, it is used to identify the pods created by this Deployment. It should match the label in the selector to ensure that the Deployment can manage the pods correctly.
+
+    spec:  
+      containers: # containers is a list of container specifications that define the containers to be run in each pod created by this Deployment. Each container specification includes details such as the container image, ports, and other configurations.
+        - name: backend
+          image: komalpreet1703/devops-social-backend:latest
+
+          ports:
+            - containerPort: 5000

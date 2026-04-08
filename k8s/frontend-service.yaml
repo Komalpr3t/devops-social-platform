@@ -1,0 +1,16 @@
+apiVersion: v1 # API version for Service resources
+kind: Service # Service exposes pods and provides stable networking
+
+metadata:
+  name: frontend-service # unique name for this frontend Service resource
+
+spec:
+  selector:
+    app: frontend # selects frontend pods by label so traffic is routed to them
+
+  ports:
+    - protocol: TCP
+      port: 80 # service port exposed inside the cluster
+      targetPort: 80 # port on the frontend pod that receives traffic
+
+  type: NodePort # exposes the service on a port on every node for external access
