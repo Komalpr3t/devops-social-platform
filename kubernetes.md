@@ -147,3 +147,16 @@ Then verify with:
 kubectl get pods
 kubectl get svc
 ```
+
+## Difference between:
+- `kubectl get nodes`: Lists all nodes in the cluster (physical or virtual machines).
+- `kubectl get pods`: Lists all pods running in the cluster (containers grouped in pods).
+
+## Recent Deployment Efforts
+I was trying to deploy the full-stack social platform application to a local Kubernetes cluster using Minikube. This involved:
+- Starting Minikube to create a local Kubernetes environment.
+- Applying the Kubernetes manifests for backend and frontend deployments and services.
+- Verifying the pods and services are running correctly.
+- Pushing the Kubernetes YAML files to GitHub for version control.
+- Ensuring the frontend can communicate with the backend via internal service DNS.
+- Testing external access to the frontend through NodePort.

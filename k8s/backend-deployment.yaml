@@ -15,12 +15,22 @@ spec: # spec means specification, it specifies the number of replicas (pods) to 
   template:  # template is a blueprint for the pods that will be created by this Deployment. It defines the specifications of the pods, such as the containers they will run and their configurations.
     metadata: 
       labels:
-        app: backend # this label is different from the one in the selector, it is used to identify the pods created by this Deployment. It should match the label in the selector to ensure that the Deployment can manage the pods correctly.
+        app: backend # this label is used to identify the pods created by this Deployment. It should match the label in the selector to ensure that the Deployment can manage the pods correctly.
 
     spec:  
-      containers: # containers is a list of container specifications that define the containers to be run in each pod created by this Deployment. Each container specification includes details such as the container image, ports, and other configurations.
+      containers:
         - name: backend
           image: komalpreet1703/devops-social-backend:latest
 
           ports:
-            - containerPort: 5000
+            - containerPort: 5000 # container listens on port 5000 inside the pod
+
+          env:
+            - name: MONGO_URI # environment variable used by backend to connect to MongoDB
+              value: "mongodb+srv://kgrewal1703_db_user:HaaSksoAxtI71BzV@cluster0.wqybf8m.mongodb.net/?appName=Cluster0"
+
+            - name: JWT_SECRET # secret key used for authentication tokens
+              value: "supersecretkey"
+
+            - name: PORT # tells Node app which port to run on
+              value: "5000"
