@@ -21,6 +21,7 @@ spec: # spec means specification, it specifies the number of replicas (pods) to 
       containers:
         - name: backend
           image: komalpreet1703/devops-social-backend:latest
+          imagePullPolicy: IfNotPresent
 
           ports:
             - containerPort: 5000 # container listens on port 5000 inside the pod
