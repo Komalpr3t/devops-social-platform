@@ -20,6 +20,7 @@ spec:
       containers: # container definitions inside each pod
         - name: frontend
           image: komalpreet1703/devops-social-frontend:latest # frontend container image
+          imagePullPolicy: IfNotPresent # Prefer local image to prevent dockerhub fetches for latest tag
 
           ports:
             - containerPort: 80 # port exposed by the frontend container
