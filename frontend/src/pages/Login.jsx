@@ -6,16 +6,19 @@ function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
   const login = async () => {
-
-    const data = await loginUser(email, password);
-
-    localStorage.setItem("token", data.token);
-
-    navigate("/home");
+    try {
+      setError("");
+      const data = await loginUser(email, password);
+      localStorage.setItem("token", data.token);
+      navigate("/home");
+    } catch (err) {
+      setError(err.message || "Invalid credentials. Please try again.");
+    }
   };
 
   return (
@@ -27,6 +30,12 @@ function Login() {
         <h1 className="text-2xl font-bold mb-6 text-center">
           Login
         </h1>
+
+        {error && (
+          <div className="bg-red-500/20 border border-red-500 text-red-400 px-4 py-2 rounded mb-4 text-sm">
+            {error}
+          </div>
+        )}
 
         <input
           placeholder="Email"

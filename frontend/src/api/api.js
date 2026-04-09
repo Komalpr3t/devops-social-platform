@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5001/api";
+const API_URL = "http://localhost:5000/api";
 
 export const loginUser = async (email, password) => {
   const res = await fetch(`${API_URL}/auth/login`, {
@@ -42,36 +42,27 @@ export const getPosts = async () => {
 };
 
 export const toggleFollow = async (token, userId) => {
-  const res = await fetch(
-    `http://localhost:5001/api/users/${userId}/follow`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const res = await fetch(`${API_URL}/users/${userId}/follow`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
   return res.json();
 };
 
 export const getProfile = async (username) => {
-  const res = await fetch(
-    `http://localhost:5001/api/users/${username}`
-  );
-
+  const res = await fetch(`${API_URL}/users/${username}`);
   return res.json();
 };
 
 export const toggleLike = async (token, postId) => {
-  const res = await fetch(
-    `http://localhost:5001/api/posts/${postId}/like`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const res = await fetch(`${API_URL}/posts/${postId}/like`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return res.json();
 };

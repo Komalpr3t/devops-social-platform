@@ -26,11 +26,18 @@ spec: # spec means specification, it specifies the number of replicas (pods) to 
             - containerPort: 5000 # container listens on port 5000 inside the pod
 
           env:
+
             - name: MONGO_URI # environment variable used by backend to connect to MongoDB
-              value: "mongodb+srv://kgrewal1703_db_user:HaaSksoAxtI71BzV@cluster0.wqybf8m.mongodb.net/?appName=Cluster0"
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: MONGO_URI
 
             - name: JWT_SECRET # secret key used for authentication tokens
-              value: "supersecretkey"
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: JWT_SECRET
 
             - name: PORT # tells Node app which port to run on
               value: "5000"

@@ -6,10 +6,13 @@ FROM node:18 AS build
 WORKDIR /app
 
 # Copy package files
-COPY . . 
+COPY package*.json ./
 
 # Install the dependencies
 RUN npm install
+
+# Copy source code
+COPY . .
 
 # Build
 RUN npm run build
